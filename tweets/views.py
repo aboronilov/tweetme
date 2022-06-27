@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponse, JsonResponse
 from tweets.models import Tweet
 
 def home_view(request, *args, **kwargs):
-   return HttpResponse("<h1>Ololo</h1>")
+   return render(request, 'pages/home.html', status=200)
 
 def tweet_detail_view(requets, tweet_id, *args, **kwargs):
    data = {
@@ -13,7 +13,7 @@ def tweet_detail_view(requets, tweet_id, *args, **kwargs):
    }
    status = 200
    try:
-      obj = Tweet.objects.get(pk=tweet_id)      
+      obj = Tweet.objects.get(pk=tweet_id)
       data["content"] = obj.content
    except:
       data['message'] = 'Not found'
