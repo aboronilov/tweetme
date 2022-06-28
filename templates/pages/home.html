@@ -7,18 +7,36 @@ cool
 {% block content %}
 Welcome to tweetme
 
+<div id="tweets" class="">
+   replace me
+</div>
+
 <script>
+   const tweetsElement = document.getElementById("tweets")
+
    const xhr = new XMLHttpRequest()
    const method = 'GET' // "POST"
    const url = "/tweets"
    const responseType = "json"
 
+   const formatTweetElement = (tweet) => {
+      formattedTweet = "<div class='mb-4'><h1>" + tweet.id + "</h1>" + "<p>" + tweet.content + "</p></div>"
+      return formattedTweet
+   }
+
    xhr.responseType = responseType
    xhr.open(method, url)
    xhr.onload = function () {
       const serverResponse = xhr.response
-      var listedItems = serverResponse.response
-      console.log(listedItems)
+      const listedItems = serverResponse.response
+      let finalTweetStr = ''
+      let i
+      for (i=0;i<listedItems.length;i++) {
+         let tweetObj = listedItems[i]
+         let currentItem = formatTweetElement(tweetObj)
+         finalTweetStr += currentItem
+      }
+      tweetsElement.innerHTML = finalTweetStr
    }
    xhr.send()
 
