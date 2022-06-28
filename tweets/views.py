@@ -3,6 +3,15 @@ from django.http import Http404, HttpResponse, JsonResponse
 
 from tweets.models import Tweet
 
+def tweet_list_view(request, *args, **kwargs):
+   objects = Tweet.objects.all()
+   tweets_list = [{"id": obj.id, "content": obj.content} for obj in objects]
+   data = {
+      'isUser': False,
+      'response': tweets_list
+   }
+   return JsonResponse(data)
+
 def home_view(request, *args, **kwargs):
    return render(request, 'pages/home.html', status=200)
 
