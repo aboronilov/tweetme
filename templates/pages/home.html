@@ -13,6 +13,17 @@ cool
    </div>
 </div>
 
+<div class="row mb-4">
+   <div class="col-md-4 mx-auto col-10">
+      <form class="form" method="POST" action="http://127.0.0.1:8000/create-tweet/">
+         {% csrf_token %}
+         <input type="hidden" value="/" name="next" />
+         <textarea class="form-control" name="content" placeholder="Your tweet"></textarea>
+         <button type="submit" class="btn btn-primary">Tweet</button>
+      </form>
+   </div>
+</div>
+
 <div id="tweets" class="row">
    replace me
 </div>
@@ -34,7 +45,7 @@ cool
    }
 
    const formatTweetElement = (tweet) => {
-      formattedTweet = "<div class='col-12 col-md-10 mx-auto mb-4 py-3 tweet' id='tweet-" + tweet.id +"'><p>" + tweet.content + 
+      formattedTweet = "<div class='border col-12 col-md-10 mx-auto mb-4 py-3 tweet' id='tweet-" + tweet.id +"'><p>" + tweet.content + 
          "</p><div class='btn-group'>" + likeBtn(tweet) +
          "</div></div>"
       return formattedTweet
