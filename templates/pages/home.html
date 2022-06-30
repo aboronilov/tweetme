@@ -5,9 +5,15 @@ cool
 {% endblock head_title %}
 
 {% block content %}
-Welcome to tweetme
+<div class="row">
+   <div class="column">
+      <!-- <h1>
+         Welcome to tweetme
+      </h1> -->
+   </div>
+</div>
 
-<div id="tweets" class="">
+<div id="tweets" class="row">
    replace me
 </div>
 
@@ -24,11 +30,11 @@ Welcome to tweetme
    }
 
    const likeBtn = (tweet) => {
-      return "<button class='btn btn-primary' onclick=handleDidLike(" + tweet.id +","+ tweet.likes +")>"+ tweet.likes +" likes</button>"
+      return "<button class='btn btn-primary btn-sm' onclick=handleDidLike(" + tweet.id +","+ tweet.likes +")>"+ tweet.likes +" likes</button>"
    }
 
    const formatTweetElement = (tweet) => {
-      formattedTweet = "<div class='mb-4 tweet' id='tweet-" + tweet.id +"'><p>" + tweet.content + 
+      formattedTweet = "<div class='col-12 col-md-10 mx-auto mb-4 py-3 tweet' id='tweet-" + tweet.id +"'><p>" + tweet.content + 
          "</p><div class='btn-group'>" + likeBtn(tweet) +
          "</div></div>"
       return formattedTweet
