@@ -1,8 +1,10 @@
 import random
 from django.shortcuts import redirect, render
 from django.http import Http404, HttpResponse, JsonResponse
-from tweets.forms import TweetForm
+from django.utils.http import url_has_allowed_host_and_scheme
+from tweetme.settings import ALLOWED_HOSTS
 
+from tweets.forms import TweetForm
 from tweets.models import Tweet
 
 def home_view(request, *args, **kwargs):
@@ -17,10 +19,10 @@ def tweet_create_view(request, *args, **kwargs):
    if form.is_valid():
       obj = form.save(commit=False)
       obj.save()
-      if next_url is not None:
+      if next_url is not None and url_has_allowed_host_and_scheme(next_url, ALLOWED_HOSTS):
          return redirect(next_url)
       form = TweetForm()
-   return render(request, 'components/form.html', context=context)      
+   return render(request, 'components/form.html', context=context)
 
 def tweet_list_view(request, *args, **kwargs):
    objects = Tweet.objects.all()
