@@ -20,7 +20,7 @@ def tweet_create_view(request, *args, **kwargs):
       obj = form.save(commit=False)
       obj.save()
       if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-         return JsonResponse({}, status=201)
+         return JsonResponse(obj.serialize(), status=201)
       if next_url is not None and url_has_allowed_host_and_scheme(next_url, ALLOWED_HOSTS):
          return redirect(next_url)
       form = TweetForm()
@@ -28,7 +28,7 @@ def tweet_create_view(request, *args, **kwargs):
 
 def tweet_list_view(request, *args, **kwargs):
    objects = Tweet.objects.all()
-   tweets_list = [{"id": obj.id, "content": obj.content, "likes": random.randint(0,120)} for obj in objects]
+   tweets_list = [obj.serialize() for obj in objects]
    data = {
       'isUser': False,
       'response': tweets_list
