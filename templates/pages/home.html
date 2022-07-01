@@ -18,7 +18,7 @@ cool
       <form class="form" method="POST" id="tweet-create-form" action="http://127.0.0.1:8000/create-tweet/">
          {% csrf_token %}
          <input type="hidden" value="/" name="next" />
-         <textarea class="form-control" name="content" placeholder="Your tweet"></textarea>
+         <textarea required="required" class="form-control" name="content" placeholder="Your tweet"></textarea>
          <button type="submit" class="btn btn-primary">Tweet</button>
       </form>
    </div>
@@ -44,9 +44,10 @@ cool
       xhr.onload = function () {
          if (xhr.status === 201) {
             const netTweetJson = xhr.response
-            // const netTweetJson = JSON.parse(newTweet)
             const newTweetElement = formatTweetElement(netTweetJson)
-            console.log(newTweetElement)
+            const ogHtml = tweetsContainerElement.innerHTML
+            tweetsContainerElement.innerHTML = newTweetElement + ogHtml
+            myForm.reset()
          }
       }
       xhr.send(myFormData)
