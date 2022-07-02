@@ -6,13 +6,19 @@ from django.conf import settings
 
 from tweets.forms import TweetForm
 from tweets.models import Tweet
+from tweets.serializers import TweetSerializer
 
 
 def home_view(request, *args, **kwargs):
    return render(request, 'pages/home.html', status=200)
 
+def tweet_create_view(request, *args, **kwargs):   
+   serializer = TweetSerializer(data=request.POST or None)
+   if serializer.is_valid():
+      serializer.save(user=request.user)
+      return JsonResponse(serializer.data, status=201)
 
-def tweet_create_view(request, *args, **kwargs):
+def tweet_create_view_pure_django(request, *args, **kwargs):
    """
    REST API create view
    """
