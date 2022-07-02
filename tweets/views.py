@@ -7,10 +7,21 @@ from django.conf import settings
 from tweets.forms import TweetForm
 from tweets.models import Tweet
 
+
 def home_view(request, *args, **kwargs):
    return render(request, 'pages/home.html', status=200)
 
+
 def tweet_create_view(request, *args, **kwargs):
+   """
+   REST API create view
+   """
+   user = request.user
+   if not request.user.is_authenticated:
+      user = None
+      if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+         return JsonResponse({}, status=401)
+      return redirect(settings.LOGIN_URL)
    form = TweetForm(request.POST or None)
    context = {
       'form': form
@@ -18,6 +29,7 @@ def tweet_create_view(request, *args, **kwargs):
    next_url = request.POST.get('next') or None
    if form.is_valid():
       obj = form.save(commit=False)
+      obj.user = user
       obj.save()
       if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
          return JsonResponse(obj.serialize(), status=201)

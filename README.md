@@ -1,4 +1,12 @@
-1. USER
+1. TWEETS
+   -> user permissions
+   -> creating
+      -> text
+      -> image
+   -> deleting
+   -> retweeting
+
+2. USER
    -> register
    -> login
    -> logout
@@ -7,14 +15,6 @@
       -> text
       -> follow button
    -> feed
-
-
-2. TWEETS
-   -> creating
-      -> text
-      -> image
-   -> deleting
-   -> retweeting
 
 3. FOLLOWING
 
