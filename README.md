@@ -5,6 +5,7 @@
       -> image
    -> deleting
    -> retweeting
+   -> liking unliking
 
 2. USER
    -> register
