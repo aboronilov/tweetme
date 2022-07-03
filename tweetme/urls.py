@@ -23,5 +23,5 @@ urlpatterns = [
     path('', home_view),
     path('tweets/', TweetListRetrieveView.as_view()),
     path('create-tweet/', tweet_create_view),
-    path('tweets/<int:tweet_id>/', tweet_detail_view)
+    path('tweets/<int:tweet_id>/', TweetListRetrieveView.as_view())
 ]
