@@ -8,6 +8,7 @@ class TweetLike(models.Model):
    timestamp = models.DateTimeField(auto_now_add=True)
 
 class Tweet(models.Model):
+   parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL)
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
    content = models.TextField(blank=True, null=True)
    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='tweet_user', through=TweetLike)
@@ -17,9 +18,7 @@ class Tweet(models.Model):
    class Meta:
       ordering = ['-id']
 
-   def serialize(self):
-      return {
-         "id": self.id,
-         "content": self.content,
-         "likes": random.randint(0, 120)
-      }
+   @property
+   def is_retweet(self):
+      return self.parent != None
+
