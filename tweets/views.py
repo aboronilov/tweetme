@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.http import Http404, HttpResponse, JsonResponse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
@@ -49,7 +50,8 @@ def tweet_action_view(request, *args, **kwargs):
     id is required
     Actions options: like, unlike, retweet
     """
-    serializer = TweetActionSerializer(data=request.POST)
+    print(request.data)
+    serializer = TweetActionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
         tweet_id = data.get('id')
@@ -59,13 +61,15 @@ def tweet_action_view(request, *args, **kwargs):
             return Response({}, status=404)
         obj = qs.first()
         if action == "like":
-            obj.likes.add(user=request.user)
+            obj.likes.add(request.user)
+            serializer = TweetSerializer(obj)
+            return Response(serializer.data, status=200)
         elif action == "unlike":
-            obj.likes.remove(user=request.user)
+            obj.likes.remove(request.user)
         elif action == "retweet":
             pass
 
-    return Response({"message": "Tweet liked"}, status=200)
+    return Response({}, status=200)
 
 # @api_view(['GET'])
 # def tweet_list_view(request, *args, **kwargs):
