@@ -69,9 +69,9 @@ def tweet_action_view(request, *args, **kwargs):
             obj.likes.remove(request.user)
         elif action == "retweet":
             new_tweet = Tweet.objects.create(
-               user=request.user, 
-               parent=obj,
-               content=content)
+                user=request.user,
+                parent=obj,
+                content=content)
             serializer = TweetSerializer(new_tweet)
             return Response(serializer.data, status=200)
 
@@ -96,9 +96,47 @@ class TweetListRetrieveView(
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
+        print(pk)
         if pk:
             return self.retrieve(request, *args, **kwargs)
         return self.list(request, *args, **kwargs)
+
+
+class TweetListAPIview(generics.ListAPIView):
+    queryset = Tweet.objects.all()
+    serializer_class = TweetSerializer
+
+
+class TweetRetrieveAPIview(generics.RetrieveAPIView):
+    queryset = Tweet.objects.all()
+    serializer_class = TweetSerializer
+
+
+class TweetMixinView(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView
+):
+    queryset = Tweet.objects.all()
+    serializer_class = TweetSerializer
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        if pk:
+            return self.retrieve(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
 def tweet_create_view_pure_django(request, *args, **kwargs):
