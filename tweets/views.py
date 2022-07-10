@@ -31,7 +31,8 @@ def tweet_create_view(request, *args, **kwargs):
 
 @api_view(['DELETE', 'POST'])
 @permission_classes([IsAuthenticated])
-def tweet_delete_view(request, tweet_id, *args, **kwargs):
+def tweet_delete_view(request, *args, **kwargs):
+    tweet_id = kwargs.get("pk")
     qs = Tweet.objects.filter(id=tweet_id)
     if not qs.exists():
         return Response({}, status=404)
@@ -67,13 +68,15 @@ def tweet_action_view(request, *args, **kwargs):
             return Response(serializer.data, status=200)
         elif action == "unlike":
             obj.likes.remove(request.user)
+            serializer = TweetSerializer(obj)
+            return Response(serializer.data, status=200)
         elif action == "retweet":
             new_tweet = Tweet.objects.create(
                 user=request.user,
                 parent=obj,
                 content=content)
             serializer = TweetSerializer(new_tweet)
-            return Response(serializer.data, status=200)
+            return Response(serializer.data, status=201)
 
     return Response({}, status=200)
 
@@ -102,12 +105,12 @@ class TweetListRetrieveView(
         return self.list(request, *args, **kwargs)
 
 
-class TweetListAPIview(generics.ListAPIView):
+class TweetListAPIview(generics.ListAPIView, generics.GenericAPIView):
     queryset = Tweet.objects.all()
     serializer_class = TweetSerializer
 
 
-class TweetRetrieveAPIview(generics.RetrieveAPIView):
+class TweetRetrieveAPIview(generics.RetrieveAPIView, generics.GenericAPIView):
     queryset = Tweet.objects.all()
     serializer_class = TweetSerializer
 

@@ -20,8 +20,7 @@ from .views import TweetListAPIview, TweetMixinView, TweetRetrieveAPIview, home_
 
 urlpatterns = [
     path('', TweetListAPIview.as_view()),
-    path('action/', tweet_action_view),
-    path('create/', tweet_create_view),
-    path('<int:pk/', TweetMixinView.as_view()),
-    path('<int:tweet_id>/delete/', tweet_delete_view)
+    # path('create/', tweet_create_view),
+    # path('<int:pk/', TweetRetrieveAPIview.as_view()),
+    # path('<int:pk>/delete/', tweet_delete_view)
 ]
