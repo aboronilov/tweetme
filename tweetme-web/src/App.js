@@ -19,6 +19,14 @@ function loadTweets(callback) {
    xhr.send()
 }
 
+const Tweet = ({tweet}) => {
+   // const tweetClassName = {className} ? {className} : "my-5 py-5 border bg-white"
+   // "col-10 mx-auto col-md-6"
+   return (
+   <div className="my-5 py-5 border bg-white text-dark">
+      <p>{ tweet.id } - { tweet.content }</p>
+   </div>)
+}
 
 function App() {
    const [tweets, setTweets] = useState([])
@@ -38,11 +46,11 @@ function App() {
             <p>
                Edit <code>src/App.js</code> and save to reload.
             </p>
-            <p>
+            <div>
                {tweets.map((tweet, index) => {
-                  return <li>{tweet.content}</li>
+                  return <Tweet tweet={tweet} key={tweet.id}/>
                })}
-            </p>
+            </div>
             <a
                className="App-link"
                href="https://reactjs.org"
