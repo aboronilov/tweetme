@@ -17,12 +17,20 @@ export const TweetsList = (props) => {
 }
 
 export const ActionBtn = ({ tweet, action }) => {
+   const [likes, setLikes] = useState(tweet.likes ? tweet.likes : 0 );
+   const [isClicked, setIsClicked] = useState(tweet.userLike ? tweet.userLike : false);
+
    const actionDisplay = action.display ? action.display : 'Action'
-   const display = action.type === "like" ? `${tweet.likes} ${actionDisplay}` : actionDisplay
+   const display = action.type === "like" ? `${likes} ${actionDisplay}` : actionDisplay
    const handleClick = (event) => {
-      event.preventDefault()
+      event.preventDefault()      
       if (action.type === "like") {
-         console.log(tweet.likes + 1)
+         if (isClicked) {
+            setLikes(likes - 1)
+         } else {
+            setLikes(likes + 1)
+         }
+         setIsClicked(!isClicked)
       }
    }
    return <button className='btn btn-primary btn-sm' onClick={handleClick}>{display}</button>
