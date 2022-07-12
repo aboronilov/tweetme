@@ -17,13 +17,15 @@ export const TweetsList = (props) => {
 }
 
 export const ActionBtn = ({ tweet, action }) => {
-   switch (action.type) {
-      case "like":
-         return <button className='btn btn-primary btn-sm'>{tweet.likes} likes</button>
-      case "unlike":
-         
+   const actionDisplay = action.display ? action.display : 'Action'
+   const display = action.type === "like" ? `${tweet.likes} ${actionDisplay}` : actionDisplay
+   const handleClick = (event) => {
+      event.preventDefault()
+      if (action.type === "like") {
+         console.log(tweet.likes + 1)
+      }
    }
-   return action.type === 'like' ? <button className='btn btn-primary btn-sm'>{tweet.likes} likes</button> : null
+   return <button className='btn btn-primary btn-sm' onClick={handleClick}>{display}</button>
 }
 
 export const Tweet = ({ tweet }) => {
@@ -33,7 +35,9 @@ export const Tweet = ({ tweet }) => {
       <div className="my-5 py-5 border bg-white text-dark">
          <p>{tweet.id} - {tweet.content}</p>
          <div className='btn btn-group'>
-            <ActionBtn tweet={tweet} action={{ type: "like" }} />
+            <ActionBtn tweet={tweet} action={{ type: "like", display: "Likes" }} />
+            <ActionBtn tweet={tweet} action={{ type: "unlike", display: "Unlike" }} />
+            <ActionBtn tweet={tweet} action={{ type: "retweet"}} />
          </div>
       </div>)
 }
