@@ -14,25 +14,31 @@ function loadTweets(callback) {
    }
    xhr.onerror = function (err) {
       console.log(err)
-      callback({"message": "The request has an error"}, 400)
+      callback({ "message": "The request has an error" }, 400)
    }
    xhr.send()
 }
 
-const Tweet = ({tweet}) => {
+const ActionBtn = ({ tweet, action }) => {
+   return action.type === 'like' ? <button className='btn btn-primary btn-sm'>{tweet.likes} likes</button> : null
+}
+
+const Tweet = ({ tweet }) => {
    // const tweetClassName = {className} ? {className} : "my-5 py-5 border bg-white"
    // "col-10 mx-auto col-md-6"
    return (
-   <div className="my-5 py-5 border bg-white text-dark">
-      <p>{ tweet.id } - { tweet.content }</p>
-   </div>)
+      <div className="my-5 py-5 border bg-white text-dark">
+         <p>{tweet.id} - {tweet.content}</p>
+         <div className='btn btn-group'>
+            <ActionBtn tweet={tweet} action={{ type: "like" }} />
+         </div>
+      </div>)
 }
 
 function App() {
    const [tweets, setTweets] = useState([])
    useEffect(() => {
       const myCallback = (response, status) => {
-         console.log(response, status)
          if (status === 200) {
             setTweets(response)
          }
@@ -48,7 +54,7 @@ function App() {
             </p>
             <div>
                {tweets.map((tweet, index) => {
-                  return <Tweet tweet={tweet} key={tweet.id}/>
+                  return <Tweet tweet={tweet} key={tweet.id} />
                })}
             </div>
             <a
